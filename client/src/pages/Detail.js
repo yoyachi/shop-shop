@@ -57,7 +57,7 @@ function Detail() {
     });
 
   };
-
+  //JSX
   return (
     <>
       {currentProduct && cart ? (
