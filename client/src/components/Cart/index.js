@@ -55,6 +55,7 @@ const Cart = () => {
             }
           </div>
         </div>
+    //Wrap it in a ternary expression 
       ) : (
           <h3>
             <span role="img" aria-label="shocked">
