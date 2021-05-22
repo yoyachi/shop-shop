@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { idbPromise } from "../../utils/helpers"
 import CartItem from "../CartItem";
 import Auth from "../../utils/auth";
 import { useStoreContext } from "../../utils/GlobalState";
-import { TOGGLE_CART } from "../../utils/actions";
+import { TOGGLE_CART, ADD_MULTIPLE_TO_CART } from "../../utils/actions";
 import "./style.css";
 
 const Cart = () => {
   const [state, dispatch] = useStoreContext();
+
+  useEffect(() => {
+    async function getCart() {
+      const cart = await idbPromise('cart', 'get');
+      dispatch({ type: ADD_MULTIPLE_TO_CART, products: [...cart] });
+    };
+
+    if (!state.cart.length) {
+      getCart();
+    }
+  }, [state.cart.length, dispatch]);
 
   function toggleCart() {
     dispatch({ type: TOGGLE_CART });
@@ -19,9 +31,7 @@ const Cart = () => {
     });
     return sum.toFixed(2);
   }
-//You should always wrap emojis (like the shopping cart icon) in a <span> element that includes role and aria-label attributes. Doing so will help screen readers understand the context of the emoji.
-
-
+  //You should always wrap emojis (like the shopping cart icon) in a <span> element that includes role and aria-label attributes. Doing so will help screen readers understand the context of the emoji.
   if (!state.cartOpen) {
     return (
       <div className="cart-closed" onClick={toggleCart}>
@@ -55,7 +65,7 @@ const Cart = () => {
             }
           </div>
         </div>
-    //Wrap it in a ternary expression 
+      //Wrap it in a ternary expression
       ) : (
           <h3>
             <span role="img" aria-label="shocked">
